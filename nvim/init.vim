@@ -49,8 +49,14 @@ highlight NonText ctermbg=none
 let mapleader = " "
 "nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>:
 
+fun! TrimWhitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfun
+
 augroup THE_KURTWOOD
     autocmd!
     autocmd BufWritePre * :call TrimWhitespace()
-augroup END    
+augroup END
 
