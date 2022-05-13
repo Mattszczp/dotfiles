@@ -32,6 +32,12 @@ set wildignore+=**/.git/*
 
 "PLUGINS
 call plug#begin('~/.vim/plugged')
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+Plug 'tpope/vim-fugitive'
+Plug 'preservim/nerdtree'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "Plug 'nvim-lua/popup.nvim'
 "Plug 'nvim-lua/plenary.nvim'
 "Plug 'nvim-telescope/telescope.nvim'
@@ -47,6 +53,7 @@ highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 
 let mapleader = " "
+nmap <C-P> :FZF<CR>
 "nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>:
 
 fun! TrimWhitespace()
