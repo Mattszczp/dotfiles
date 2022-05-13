@@ -38,6 +38,13 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'preservim/nerdtree'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+Plug 'onsails/lspkind-nvim'
+" Plug 'github/copilot.vim'
+Plug 'nvim-lua/lsp_extensions.nvim'
 "Plug 'nvim-lua/popup.nvim'
 "Plug 'nvim-lua/plenary.nvim'
 "Plug 'nvim-telescope/telescope.nvim'
@@ -45,16 +52,35 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 Plug 'gruvbox-community/gruvbox'
 Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
 
 colorscheme gruvbox
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
+let g:deoplete#enable_at_startup = 1
 
 let mapleader = " "
-nmap <C-P> :FZF<CR>
+nnoremap <C-P> :FZF<CR>
+nnoremap <C-n> :NERDTreeToggle<CR>
+"nmap <C-q> :NERDTreeClose<CR>
+
 "nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>:
+
+" GO
+let g:go_auto_sameids = 1
+let g:go_fmt_command = "goimports"
+let g:go_auto_type_info = 1
+au Filetype go nmap <leader>ga <Plug>(go-alternate-edit)
+au Filetype go nmap <leader>gah <Plug>(go-alternate-split)
+au Filetype go nmap <leader>gav <Plug>(go-alternate-vertical)
+au FileType go nmap <F10> :GoTest -short<cr>
+au FileType go nmap <F9> :GoCoverageToggle -short<cr>
+au FileType go nmap <F12> <Plug>(go-def)
+
+
+" AUTO COMMANDS
 
 fun! TrimWhitespace()
     let l:save = winsaveview()
@@ -67,3 +93,4 @@ augroup THE_KURTWOOD
     autocmd BufWritePre * :call TrimWhitespace()
 augroup END
 
+lua require("mattszczp")
