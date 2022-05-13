@@ -45,6 +45,7 @@ Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 Plug 'onsails/lspkind-nvim'
 " Plug 'github/copilot.vim'
 Plug 'nvim-lua/lsp_extensions.nvim'
+Plug 'hrsh7th/vim-vsnip'
 "Plug 'nvim-lua/popup.nvim'
 "Plug 'nvim-lua/plenary.nvim'
 "Plug 'nvim-telescope/telescope.nvim'
@@ -55,6 +56,8 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
+
+set completeopt=menu,menuone,noselect
 
 colorscheme gruvbox
 highlight Normal ctermbg=none
