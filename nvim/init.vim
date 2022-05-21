@@ -69,7 +69,7 @@ nnoremap <C-P> :FZF<CR>
 nnoremap <C-n> :NERDTreeToggle<CR>
 "nmap <C-q> :NERDTreeClose<CR>
 
-"nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>:
+nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>:
 
 " GO
 let g:go_auto_sameids = 1
