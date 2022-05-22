@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include mattszczp.workstation"
+      include_role:
+        name: "mattszczp.workstation"

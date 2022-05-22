@@ -1,0 +1,94 @@
+---
+- name: Configure DNF to be faster
+  become: yes
+  blockinfile:
+    path: /etc/dnf/dnf.conf
+    block: |
+      fastestmirror=True
+      max_parallel_downloads=10
+      defaultyes=True
+      keepcache=True
+
+- name: Update all packages
+  become: yes
+  dnf:
+    name: "*"
+    state: latest
+  tags:
+    - essentials
+    - software
+    - updates
+
+- name: Install RPM Fusion
+  become: yes
+  dnf:
+    name:
+    - "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_facts['distribution_major_version']}}.noarch.rpm"
+    - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ansible_facts['distribution_major_version']}}.noarch.rpm"
+    state: present
+    disable_gpg_check: yes
+  tags:
+    - essentials
+    - software
+    - rpm
+
+- name: Check if .oh-my-zsh is Installed
+  stat:
+    path: ~/.oh-my-zsh
+  register: oh_my_zsh
+  tags:
+    - essentials
+    - zsh
+
+- name: Install oh my zsh
+  git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: ~/.oh-my-zsh
+    depth: 1
+  when: not oh_my_zsh.stat.exists
+  tags:
+    - essentials
+    - zsh
+
+- name: Update Groups
+  dnf:
+    name:
+      - "@core"
+      - "@multimedia"
+      - "@sound-and-video"
+    state: latest
+  tags:
+    - essentials
+    - software
+    - rpm
+    - codecs
+
+- name: Install essential programs
+  become: yes
+  dnf:
+    name: "{{pkgs}}"
+    state: present
+  tags:
+    - essentials
+    - software
+    - rpm
+
+- name: Add the flathub flatpak repository remote to the user installation
+  become: yes
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+  tags:
+    - essentials
+    - flatpak
+    - software
+
+- name: Install eseential flatpaks
+  community.general.flatpak:
+    name: "{{flatpaks}}"
+    state: present
+  tags:
+    - essentials
+    - software
+    - flatpak

@@ -1,0 +1,4 @@
+---
+# tasks file for workstation
+- include_tasks: ./install_essentials.yml
+  #- include_tasks: ./install_work.yml
