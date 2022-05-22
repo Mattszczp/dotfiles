@@ -42,15 +42,9 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 Plug 'onsails/lspkind-nvim'
-" Plug 'github/copilot.vim'
 Plug 'nvim-lua/lsp_extensions.nvim'
 Plug 'hrsh7th/vim-vsnip'
-"Plug 'nvim-lua/popup.nvim'
-"Plug 'nvim-lua/plenary.nvim'
-"Plug 'nvim-telescope/telescope.nvim'
-"Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'gruvbox-community/gruvbox'
-Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -65,11 +59,8 @@ let g:deoplete#enable_at_startup = 1
 
 let mapleader = " "
 nnoremap <C-P> :FZF<CR>
-nnoremap <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
-"nmap <C-q> :NERDTreeClose<CR>
-
-"nnoremap <leader>ps :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>:
+nnoremap <C-N> :NERDTreeToggle<CR>
 
 " GO
 let g:go_auto_sameids = 1
@@ -84,7 +75,6 @@ au FileType go nmap <F12> <Plug>(go-def)
 
 
 " AUTO COMMANDS
-
 fun! TrimWhitespace()
     let l:save = winsaveview()
     keeppatterns %s/\s\+$//e
