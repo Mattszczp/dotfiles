@@ -5,7 +5,7 @@ plugins=(git macos iterm2 ssh-agent aliases python docker git-auto-fetch golang 
 alias vim='nvim'
 
 source $ZSH/oh-my-zsh.sh
-if [ $(uname -r | sed -n 's/.*\(*Microsoft*\).*/\1/ip') ];
+if [ $(uname -r | grep "microsoft") ];
 then
     export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
     ss -a | grep -q $SSH_AUTH_SOCK
