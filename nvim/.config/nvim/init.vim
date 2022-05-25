@@ -40,8 +40,8 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'onsails/lspkind.nvim'
 Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
-Plug 'onsails/lspkind-nvim'
 Plug 'nvim-lua/lsp_extensions.nvim'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'gruvbox-community/gruvbox'
@@ -59,6 +59,7 @@ let g:deoplete#enable_at_startup = 1
 
 let mapleader = " "
 nnoremap <C-P> :FZF<CR>
+nnoremap <leader>vd :lua vim.diagnostic.open_float()<CR>
 let NERDTreeShowHidden=1
 nnoremap <C-N> :NERDTreeToggle<CR>
 
