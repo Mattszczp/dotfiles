@@ -48,6 +48,8 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+"Snippets
 call plug#end()
 
 set completeopt=menu,menuone,noselect
