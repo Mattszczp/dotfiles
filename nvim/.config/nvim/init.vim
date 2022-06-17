@@ -66,7 +66,6 @@ let NERDTreeShowHidden=1
 nnoremap <C-N> :NERDTreeToggle<CR>
 
 " GO
-let g:go_auto_sameids = 1
 let g:go_fmt_command = "goimports"
 let g:go_auto_type_info = 1
 au Filetype go nmap <leader>ga <Plug>(go-alternate-edit)
