@@ -31,9 +31,7 @@ set wildignore+=**/ios/*
 set wildignore+=**/.git/*
 
 "PLUGINS
-call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+call plug#begin(stdpath('data') . '/plugged')
 Plug 'tpope/vim-fugitive'
 Plug 'preservim/nerdtree'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -64,7 +62,6 @@ highlight NonText ctermbg=none
 let g:deoplete#enable_at_startup = 1
 
 let mapleader = " "
-nnoremap <C-P> :FZF<CR>
 nnoremap <leader>vd :lua vim.diagnostic.open_float()<CR>
 let NERDTreeShowHidden=1
 nnoremap <C-N> :NERDTreeToggle<CR>

@@ -60,10 +60,10 @@ cmp.setup({
 		{ name = "nvim_lsp" },
 
 		-- For vsnip user.
-		-- { name = 'vsnip' },
+		{ name = 'vsnip' },
 
 		-- For luasnip user.
-		{ name = "luasnip" },
+		-- { name = "luasnip" },
 
 		-- For ultisnips user.
 		-- { name = 'ultisnips' },
@@ -101,4 +101,3 @@ require('lspconfig')['sumneko_lua'].setup {
 }
 require('lspconfig')['tflint'].setup {capabilities = capabilities}
 require('lspconfig')['tsserver'].setup {capabilities = capabilities}
-require('lspconfig')['pyright'].setup {capabilities = capabilities}
