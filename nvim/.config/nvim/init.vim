@@ -52,6 +52,8 @@ Plug 'williamboman/nvim-lsp-installer'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'onsails/lspkind.nvim'
 "Snippets
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
 
 set completeopt=menu,menuone,noselect
@@ -72,10 +74,15 @@ let g:go_auto_type_info = 1
 au Filetype go nmap <leader>ga <Plug>(go-alternate-edit)
 au Filetype go nmap <leader>gah <Plug>(go-alternate-split)
 au Filetype go nmap <leader>gav <Plug>(go-alternate-vertical)
-au FileType go nmap <F10> :GoTest -short<cr>
-au FileType go nmap <F9> :GoCoverageToggle -short<cr>
+au FileType go nmap <leader>gt :GoTest -short<cr>
+au FileType go nmap <leader>gct :GoCoverageToggle -short<cr>
 au FileType go nmap <F12> <Plug>(go-def)
 
+"Telescope
+nnoremap <leader>ff <cmd>Telescope git_files<cr>
+nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
+nnoremap <leader>fi <cmd>Telescope lsp_implementations<cr>
+nnoremap <leader>fd <cmd>Telescope lsp_definitions<cr>
 
 " AUTO COMMANDS
 fun! TrimWhitespace()
