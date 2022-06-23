@@ -1,0 +1,3 @@
+bin/.local/bin/*
+!bin/.local/bin/tmux-sessionizer
+!bin/.local/bin/tmux-cht.sh
