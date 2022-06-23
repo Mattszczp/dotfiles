@@ -1,7 +1,7 @@
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR='nvim'
 ZSH_THEME="robbyrussell"
-plugins=(git macos iterm2 aliases python docker git-auto-fetch golang helm kubectl kubectx tmux)
+plugins=(git macos iterm2 aliases python docker git-auto-fetch golang helm kubectl kubectx tmux zsh-autosuggestions)
 alias vim='nvim'
 
 source $ZSH/oh-my-zsh.sh
