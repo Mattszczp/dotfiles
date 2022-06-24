@@ -93,4 +93,11 @@ augroup THE_KURTWOOD
     autocmd BufWritePre * :call TrimWhitespace()
 augroup END
 
+"KEYBINDINGS
+nnoremap gp :G push<cr>
+nnoremap gaa :G add .<cr>
+nnoremap gp :G push<cr>
+nnoremap gc :G commit<cr>
+
+
 lua require("mattszczp")
