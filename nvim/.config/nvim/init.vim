@@ -17,6 +17,8 @@ set scrolloff=8
 set colorcolumn=80
 set signcolumn=yes
 set cmdheight=2
+set noswapfile
+set nobackup
 
 " Nice menu when typing `:find *.py`
 set wildmode=longest,list,full
@@ -35,8 +37,17 @@ call plug#begin(stdpath('data') . '/plugged')
 Plug 'tpope/vim-fugitive'
 Plug 'preservim/nerdtree'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'gruvbox-community/gruvbox'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 "CMP & LSP
+Plug 'onsails/lspkind.nvim'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
@@ -46,14 +57,6 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-vsnip'
 " CMP & LSP END
-Plug 'gruvbox-community/gruvbox'
-Plug 'neovim/nvim-lspconfig'
-Plug 'williamboman/nvim-lsp-installer'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'onsails/lspkind.nvim'
-"Snippets
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
 
 set completeopt=menu,menuone,noselect
@@ -77,12 +80,6 @@ au Filetype go nmap <leader>gav <Plug>(go-alternate-vertical)
 au FileType go nmap <leader>gt :GoTest -short<cr>
 au FileType go nmap <leader>gct :GoCoverageToggle -short<cr>
 au FileType go nmap <F12> <Plug>(go-def)
-
-"Telescope
-nnoremap <leader>ff <cmd>Telescope git_files<cr>
-nnoremap <leader>fr <cmd>Telescope lsp_references<cr>
-nnoremap <leader>fi <cmd>Telescope lsp_implementations<cr>
-nnoremap <leader>fd <cmd>Telescope lsp_definitions<cr>
 
 " AUTO COMMANDS
 fun! TrimWhitespace()
