@@ -15,35 +15,6 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(_, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-  vim.keymap.set('n', '<space>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, bufopts)
-  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
-end
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
 -- Setup nvim-cmp.
 local cmp = require("cmp")
 local source_mapping = {
@@ -110,35 +81,42 @@ tabnine:setup({
 	snippet_placeholder = "..",
 })
 
-require('lspconfig')['pyright'].setup {
-    capabilities = capabilities,
-    on_attach = on_attach
-}
-require('lspconfig')['ansiblels'].setup {
-    capabilities = capabilities,
-    on_attach = on_attach
-}
-require('lspconfig')['bashls'].setup {
-    capabilities = capabilities,
-    on_attach = on_attach
-}
-require('lspconfig')['dockerls'].setup {
-    capabilities = capabilities,
-    on_attach = on_attach
-}
-require('lspconfig')['eslint'].setup {
-    capabilities = capabilities,
-    on_attach = on_attach
-}
-require('lspconfig')['gopls'].setup {
-    capabilities = capabilities,
-    on_attach = on_attach
-}
-require('lspconfig')['html'].setup {
-    capabilities = capabilities,
-    on_attach = on_attach
-}
-require('lspconfig')['sumneko_lua'].setup {
+local function config(_config)
+    return vim.tbl_deep_extend("force", {
+        capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+        on_attach = function(_, bufnr)
+        -- Enable completion triggered by <c-x><c-o>
+        vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+        -- Mappings.
+        -- See `:help vim.lsp.*` for documentation on any of the below functions
+        local bufopts = { noremap=true, silent=true, buffer=bufnr }
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+        vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+        vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+        vim.keymap.set('n', '<space>wl', function()
+          print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+        end, bufopts)
+        vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+        vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+        vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+        vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+        end,
+    }, _config or {})
+end
+
+require('lspconfig')['pyright'].setup(config())
+require('lspconfig')['ansiblels'].setup(config())
+require('lspconfig')['bashls'].setup(config())
+require('lspconfig')['dockerls'].setup(config())
+require('lspconfig')['eslint'].setup(config())
+require('lspconfig')['gopls'].setup(config())
+require('lspconfig')['html'].setup(config())
+require('lspconfig')['sumneko_lua'].setup(config({
     settings = {
         Lua = {
             runtime = {
@@ -157,9 +135,6 @@ require('lspconfig')['sumneko_lua'].setup {
     },
     capabilities = capabilities,
     on_attach = on_attach
-}
-require('lspconfig')['tflint'].setup {capabilities = capabilities}
-require('lspconfig')['tsserver'].setup {
-    capabilities = capabilities,
-    on_attach = on_attach
-}
+}))
+require('lspconfig')['tflint'].setup(config())
+require('lspconfig')['tsserver'].setup(config())
