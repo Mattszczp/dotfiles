@@ -5,7 +5,7 @@ require("mattszczp.set")
 require("mattszczp.packer")
 require("mattszczp.lsp")
 require("mattszczp.neogit")
-
+require("mattszczp.keymap")
 local autocmd = vim.api.nvim_create_autocmd
 
 autocmd({"BufWritePre"}, {
