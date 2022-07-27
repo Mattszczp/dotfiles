@@ -138,3 +138,4 @@ require('lspconfig')['sumneko_lua'].setup(config({
 }))
 require('lspconfig')['tflint'].setup(config())
 require('lspconfig')['tsserver'].setup(config())
+require('lspconfig').rust_analyzer.setup(config())
