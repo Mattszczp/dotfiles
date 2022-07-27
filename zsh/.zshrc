@@ -49,5 +49,3 @@ eval "$(pyenv init --path)"
 
 export PATH="$HOME/.gvm/bin:$PATH"
 alias py="python"
-export GOPATH=$HOME/personal/go
-export PATH=$PATH:$GOPATH/bin
