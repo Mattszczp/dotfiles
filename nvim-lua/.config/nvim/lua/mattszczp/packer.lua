@@ -21,6 +21,12 @@ return require("packer").startup(function(use)
     use("L3MON4D3/LuaSnip")
     use("saadparwaiz1/cmp_luasnip")
     use {	"windwp/nvim-autopairs",config = function() require("nvim-autopairs").setup {} end }
+    --Debugging
+    use("mfussenegger/nvim-dap")
+    use("leoluz/nvim-dap-go")
+    use("rcarriga/nvim-dap-ui")
+    use("theHamsta/nvim-dap-virtual-text")
+    use("nvim-telescope/telescope-dap.nvim")
 
     use("gruvbox-community/gruvbox")
     use("folke/tokyonight.nvim")
