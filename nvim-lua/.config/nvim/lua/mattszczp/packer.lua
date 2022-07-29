@@ -30,5 +30,6 @@ return require("packer").startup(function(use)
 
     use("gruvbox-community/gruvbox")
     use("folke/tokyonight.nvim")
+    use('mustache/vim-mustache-handlebars')
 
 end)

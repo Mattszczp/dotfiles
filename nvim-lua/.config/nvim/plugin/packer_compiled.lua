@@ -190,6 +190,11 @@ _G.packer_plugins = {
     path = "/Users/matts/.local/share/nvim/site/pack/packer/start/tokyonight.nvim",
     url = "https://github.com/folke/tokyonight.nvim"
   },
+  ["vim-mustache-handlebars"] = {
+    loaded = true,
+    path = "/Users/matts/.local/share/nvim/site/pack/packer/start/vim-mustache-handlebars",
+    url = "https://github.com/mustache/vim-mustache-handlebars"
+  },
   ["which-key.nvim"] = {
     loaded = true,
     path = "/Users/matts/.local/share/nvim/site/pack/packer/start/which-key.nvim",
