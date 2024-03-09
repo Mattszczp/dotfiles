@@ -1,0 +1,7 @@
+# -- custom -------------------------------------------------------------------
+
+bind-key -r i run-shell "tmux neww tmux-cht.sh"
+# forget the find window.  That is for chumps
+bind-key -r f run-shell "tmux neww tmux-sessionizer"
+# Enable mouse mode (tmux 2.1 and above)
+set -g mouse on
