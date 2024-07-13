@@ -6,15 +6,14 @@
 lvim.builtin.dap.active = true
 
 lvim.plugins = {
-  { "leoluz/nvim-dap-go" }
+	{ "leoluz/nvim-dap-go" },
 }
 
-require('dap-go').setup()
+require("dap-go").setup()
 
-
-local formatters = require "lvim.lsp.null-ls.formatters"
-formatters.setup {
-  { name = "gofmt" },
-  { name = "goimports" }
-}
+local formatters = require("lvim.lsp.null-ls.formatters")
+formatters.setup({
+	{ name = "gofmt" },
+	{ name = "goimports" },
+})
 lvim.format_on_save.enabled = true
