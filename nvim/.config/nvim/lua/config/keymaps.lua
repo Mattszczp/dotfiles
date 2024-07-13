@@ -8,7 +8,7 @@ map("n", "<leader>qa", "<cmd>qa!<cr>", "Quit all")
 map("n", "<leader>dw", "<cmd>close<cr>", "Window")
 
 -- Diagnostic keymaps
-map('n', 'gx', vim.diagnostic.open_float, "Show diagnostics under cursor")
+map("n", "gx", vim.diagnostic.open_float, "Show diagnostics under cursor")
 
 -- Easier access to beginning and end of lines
 map("n", "<M-h>", "^", "Go to beginning of line")
@@ -55,7 +55,6 @@ map("n", "<leader>e", "<cmd>Ex<cr>", "Open NetRW")
 -- greatest remap ever
 map("x", "<leader>p", [["_dP]])
 
-
 -- Harpoon
 local mark = require("harpoon.mark")
 local ui = require("harpoon.ui")
@@ -63,7 +62,15 @@ local ui = require("harpoon.ui")
 map("n", "<leader>a", mark.add_file)
 map("n", "<C-e>", ui.toggle_quick_menu)
 
-map("n", "<C-h>", function() ui.nav_file(1) end)
-map("n", "<C-t>", function() ui.nav_file(2) end)
-map("n", "<C-n>", function() ui.nav_file(3) end)
-map("n", "<C-s>", function() ui.nav_file(4) end)
+map("n", "<C-h>", function()
+	ui.nav_file(1)
+end)
+map("n", "<C-t>", function()
+	ui.nav_file(2)
+end)
+map("n", "<C-n>", function()
+	ui.nav_file(3)
+end)
+map("n", "<C-s>", function()
+	ui.nav_file(4)
+end)
