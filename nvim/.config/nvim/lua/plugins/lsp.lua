@@ -92,6 +92,7 @@ return {
 					"lua_ls",
 					"gopls",
 					"pylsp",
+					"rust_analyzer",
 				},
 				handlers = {
 					-- this first function is the "default handler"
