@@ -1,141 +1,99 @@
 return {
-    {
-        "neovim/nvim-lspconfig",
-		dependencies = {
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
-			{
-				"j-hui/fidget.nvim",
-				tag = "legacy",
-				event = "LspAttach",
-			},
-			"folke/neodev.nvim",
-			"RRethy/vim-illuminate",
-			"hrsh7th/cmp-nvim-lsp",
-		},
+  {
+    'VonHeikemen/lsp-zero.nvim',
+    branch = 'v3.x',
+    lazy = true,
+    config = false,
+    init = function()
+      -- Disable automatic setup, we are doing it manually
+      vim.g.lsp_zero_extend_cmp = 0
+      vim.g.lsp_zero_extend_lspconfig = 0
+    end,
+  },
+  {
+    'williamboman/mason.nvim',
+    lazy = false,
+    config = true,
+  },
 
-        config = function()
-            -- Set up Mason before anything else
-            require("mason").setup()
-            require("mason-lspconfig").setup({
-                ensure_installed = {
-                    "lua_ls",
-                    "pylsp",
-                    "gopls",
-                },
-                automatic_installation = true,
-        })
+  -- Autocompletion
+  {
+    'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
+    dependencies = {
+        "L3MON4D3/LuaSnip",
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-nvim-lua",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+        "L3MON4D3/LuaSnip",
+        "saadparwaiz1/cmp_luasnip",
+        "rafamadriz/friendly-snippets",
+    },
+    config = function()
+      -- Here is where you configure the autocompletion settings.
+      local lsp_zero = require('lsp-zero')
+      lsp_zero.extend_cmp()
 
-        require("neodev").setup()
-        require("fidget").setup()
+      -- And you can configure cmp even more, if you want to.
+      local cmp = require('cmp')
+      local cmp_action = lsp_zero.cmp_action()
 
-        -- Set up cool signs for diagnostics
-        local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-        for type, icon in pairs(signs) do
-            local hl = "DiagnosticSign" .. type
-            vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-        end
-
-        -- Diagnostic config
-        local config = {
-            virtual_text = false,
-            signs = {
-                active = signs,
-            },
-            update_in_insert = true,
-            underline = true,
-            severity_sort = true,
-            float = {
-                focusable = true,
-                style = "minimal",
-                border = "rounded",
-                source = "always",
-                header = "",
-                prefix = "",
-            },
-        }
-        vim.diagnostic.config(config)
-
-        -- This function gets run when an LSP connects to a particular buffer.
-        local on_attach = function(client, bufnr)
-            local lsp_map = require("helpers.keys").lsp_map
-
-            lsp_map("<leader>lr", vim.lsp.buf.rename, bufnr, "Rename symbol")
-            lsp_map("<leader>la", vim.lsp.buf.code_action, bufnr, "Code action")
-            lsp_map("<leader>ld", vim.lsp.buf.type_definition, bufnr, "Type definition")
-            lsp_map("<leader>ls", require("telescope.builtin").lsp_document_symbols, bufnr, "Document symbols")
-
-            lsp_map("gd", vim.lsp.buf.definition, bufnr, "Goto Definition")
-            lsp_map("gr", require("telescope.builtin").lsp_references, bufnr, "Goto References")
-            lsp_map("gI", vim.lsp.buf.implementation, bufnr, "Goto Implementation")
-            lsp_map("K", vim.lsp.buf.hover, bufnr, "Hover Documentation")
-            lsp_map("gD", vim.lsp.buf.declaration, bufnr, "Goto Declaration")
-
-            -- Create a command `:Format` local to the LSP buffer
-            vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
-                vim.lsp.buf.format()
-            end, { desc = "Format current buffer with LSP" })
-
-            lsp_map("<leader>ff", "<cmd>Format<cr>", bufnr, "Format")
-
-            -- Attach and configure vim-illuminate
-            require("illuminate").on_attach(client)
-        end
-
-        -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-
-        -- Lua
-        require("lspconfig")["lua_ls"].setup({
-            on_attach = on_attach,
-            capabilities = capabilities,
-            settings = {
-                Lua = {
-                    completion = {
-                        callSnippet = "Replace",
-                    },
-                    diagnostics = {
-                        globals = { "vim" },
-                    },
-                    workspace = {
-                        library = {
-                            [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-                            [vim.fn.stdpath("config") .. "/lua"] = true,
-                        },
-                    },
-                },
-            },
-        })
-
-        require("lspconfig")["pylsp"].setup({
-            on_attach = on_attach,
-            capabilities = capabilities,
-            settings = {
-                pylsp = {
-                    plugins = {
-                        flake8 = {
-                            enabled = true,
-                            maxLineLength = 88, -- Black's line length
-                        },
-                        -- Disable plugins overlapping with flake8
-                        pycodestyle = {
-                            enabled = false,
-                        },
-                        mccabe = {
-                            enabled = false,
-                        },
-                        pyflakes = {
-                            enabled = false,
-                        },
-                        -- Use Black as the formatter
-                        autopep8 = {
-                            enabled = false,
-                        },
-                    },
-                },
-            },
-        })
+      cmp.setup({
+        formatting = lsp_zero.cmp_format({details = true}),
+        mapping = cmp.mapping.preset.insert({
+          ['<CR>'] = cmp.mapping.confirm(),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-d>'] = cmp.mapping.scroll_docs(4),
+          ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+        }),
+        snippet = {
+          expand = function(args)
+            require('luasnip').lsp_expand(args.body)
+          end,
+        },
+      })
     end
-    }
+  },
+
+  -- LSP
+  {
+    'neovim/nvim-lspconfig',
+    cmd = {'LspInfo', 'LspInstall', 'LspStart'},
+    event = {'BufReadPre', 'BufNewFile'},
+    dependencies = {
+      {'hrsh7th/cmp-nvim-lsp'},
+      {'williamboman/mason-lspconfig.nvim'},
+    },
+    config = function()
+      -- This is where all the LSP shenanigans will live
+      local lsp_zero = require('lsp-zero')
+      lsp_zero.extend_lspconfig()
+
+      --- if you want to know more about lsp-zero and mason.nvim
+      --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
+      lsp_zero.on_attach(function(client, bufnr)
+        -- see :help lsp-zero-keybindings
+        -- to learn the available actions
+        lsp_zero.default_keymaps({buffer = bufnr})
+      end)
+
+      require('mason-lspconfig').setup({
+        ensure_installed = {
+            "lua_ls",
+            "gopls",
+            "pylsp",
+        },
+        handlers = {
+          -- this first function is the "default handler"
+          -- it applies to every language server without a "custom handler"
+          function(server_name)
+            require('lspconfig')[server_name].setup({})
+          end,
+        }
+      })
+    end
+  }
 }
