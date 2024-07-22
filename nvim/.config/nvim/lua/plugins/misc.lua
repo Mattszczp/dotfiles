@@ -5,4 +5,11 @@ return {
 		"numToStr/Comment.nvim",
 		opts = {},
 	},
+  -- Autoclose
+  {
+    'm4xshen/autoclose.nvim',
+    config = function ()
+      require("autoclose").setup()
+    end
+  }
 }
