@@ -27,3 +27,8 @@ fi
 
 # opencode
 export PATH=$HOME/.opencode/bin:$PATH
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+
+# Pi
+export PATH="/home/kurtwood/.local/share/fnm/node-versions/v25.9.0/installation/bin:$PATH"
