@@ -1,0 +1,2 @@
+- Follow YAGNI principles.
+- Follow KISS principles.
