@@ -20,7 +20,6 @@ chezmoi apply
 ## Daily use
 
 ```sh
-chezmoi edit ~/.zshrc    # opens the source file in the repo
 chezmoi apply            # deploy changes to home
 chezmoi status           # what differs (exit 1 + output = out of sync)
 ```
