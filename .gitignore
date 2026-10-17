@@ -1,3 +1,1 @@
-# Legacy stow-era dir holding third-party binaries until the ~/.local/bin migration.
-# Removed for good once ~/.local/bin is a real directory again.
-/bin/
+# Nothing to ignore yet; the legacy bin/ dir was removed in the chezmoi migration.

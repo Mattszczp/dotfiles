@@ -2,6 +2,3 @@
 
 # Repo-only files (dot-prefixed source files are already ignored by chezmoi)
 README.md
-
-# Legacy dir left over from the stow layout; removed after the bin migration
-bin/**
