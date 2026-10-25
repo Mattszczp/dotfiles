@@ -4,9 +4,21 @@ Chezmoi-managed dotfiles. The repo is the chezmoi source dir.
 
 ## Install
 
-```sh
-brew install chezmoi
+macOS:
 
+```sh
+brew install chezmoi pre-commit go
+```
+
+Fedora:
+
+```sh
+sudo dnf install chezmoi pre-commit golang ghostty fish tmux
+```
+
+Then deploy:
+
+```sh
 mkdir -p ~/.config/chezmoi
 cat > ~/.config/chezmoi/chezmoi.toml <<'EOF'
 sourceDir = "~/.dotfiles"
@@ -22,4 +34,11 @@ chezmoi apply
 ```sh
 chezmoi apply            # deploy changes to home
 chezmoi status           # what differs (exit 1 + output = out of sync)
+```
+
+## Development
+
+```sh
+pre-commit install              # enable hooks once per clone
+pre-commit run --all-files      # run hooks against every file
 ```
