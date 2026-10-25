@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+HEIGHT=0
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --height)
+            [[ $# -ge 2 ]] || {
+                echo "--height needs a value" >&2
+                exit 2
+            }
+            HEIGHT=$2
+            shift 2
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+case $HEIGHT in
+    0|1080|1440|2160) ;;
+    *)
+        echo "--height must be 1080, 1440, or 2160" >&2
+        exit 2
+        ;;
+esac
+
+[[ $# -gt 0 ]] || {
+    echo "usage: ${0##*/} [--height 1080|1440|2160] PATH..." >&2
+    exit 2
+}
+
+for arg in "$@"; do
+    if [[ -d $arg ]]; then
+        files=("$arg"/*)
+        outdir="$arg/youtube"
+    else
+        files=("$arg")
+        outdir="$(dirname "$arg")/youtube"
+    fi
+    mkdir -p "$outdir"
+
+    for src in "${files[@]}"; do
+        [[ -f $src ]] || continue
+        case ${src,,} in
+            *.mov|*.mp4|*.m4v|*.mkv|*.avi|*.mts|*.m2ts|*.mxf|*.webm|*.wmv|*.flv|*.mpg|*.mpeg|*.ts|*.3gp|*.ogv) ;;
+            *) continue ;;
+        esac
+
+        info=$(ffprobe -v error -select_streams v:0 \
+            -show_entries stream=height,avg_frame_rate -of csv=p=0 "$src")
+        IFS=, read -r h fps <<< "$info"
+        [[ $h =~ ^[0-9]+$ ]] || {
+            echo "cannot read resolution: $src" >&2
+            exit 1
+        }
+        fps=$(awk -v r="$fps" 'BEGIN {
+            split(r, a, "/")
+            print (a[2] ? a[1] / a[2] : 30)
+        }')
+        [[ $fps =~ ^[0-9]+([.][0-9]+)?$ ]] || fps=30
+
+        if ((HEIGHT > 0)); then
+            ((HEIGHT <= h)) || {
+                echo "will not upscale $src to ${HEIGHT}p" >&2
+                exit 1
+            }
+            h=$HEIGHT
+        fi
+
+        if ((fps > 30)); then
+            case $h in
+                2160) cap=75 ;;
+                1440) cap=26 ;;
+                *) cap=13 ;;
+            esac
+        else
+            case $h in
+                2160) cap=50 ;;
+                1440) cap=18 ;;
+                *) cap=9 ;;
+            esac
+        fi
+
+        gop=$(awk -v f="$fps" 'BEGIN {
+            g = int(f / 2 + 0.5)
+            if (g < 1) g = 1
+            print g
+        }')
+
+        if ((HEIGHT > 0)); then
+            scale=(-vf "scale=-2:$HEIGHT:flags=lanczos")
+        fi
+
+        name=$(basename "$src")
+        stem=${name%.*}
+        ffmpeg -hide_banner -nostdin -y -stats -i "$src" \
+            -map 0:v:0 -map '0:a:0?' \
+            -map_metadata -1 \
+            "${scale[@]}" \
+            -c:v h264_nvenc -preset p7 -tune hq \
+            -rc vbr -cq 19 -b:v 0 \
+            -multipass fullres \
+            -spatial-aq 1 -aq-strength 10 \
+            -b_ref_mode middle \
+            -maxrate "${cap}M" -bufsize "$((cap * 2))M" \
+            -profile:v high -pix_fmt yuv420p -bf 2 -g "$gop" \
+            -no-scenecut 1 -forced-idr 1 \
+            -c:a aac -b:a 384k -ar 48000 -ac 2 \
+            -fps_mode passthrough \
+            -movflags +faststart -use_editlist 0 \
+            -f mp4 "$outdir/$stem.mp4"
+    done
+done

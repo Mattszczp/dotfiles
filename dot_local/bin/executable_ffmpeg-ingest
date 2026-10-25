@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+[[ $# -gt 0 ]] || {
+    echo "usage: ${0##*/} PATH..." >&2
+    exit 2
+}
+
+for arg in "$@"; do
+    if [[ -d $arg ]]; then
+        files=("$arg"/*)
+        outdir="$arg/prores"
+    else
+        files=("$arg")
+        outdir="$(dirname "$arg")/prores"
+    fi
+    mkdir -p "$outdir"
+
+    for src in "${files[@]}"; do
+        [[ -f $src ]] || continue
+        case ${src,,} in
+            *.mov|*.mp4|*.m4v|*.mkv|*.avi|*.mts|*.m2ts|*.mxf|*.webm|*.wmv|*.flv|*.mpg|*.mpeg|*.ts|*.3gp|*.ogv) ;;
+            *) continue ;;
+        esac
+
+        name=$(basename "$src")
+        stem=${name%.*}
+        ffmpeg -hide_banner -nostdin -y -stats -i "$src" \
+            -map 0:v:0 -map '0:a?' -map_metadata 0 \
+            -c:v prores_ks -profile:v 2 -pix_fmt yuv422p10le -vendor apl0 \
+            -c:a pcm_s24le -ar 48000 \
+            -fps_mode cfr \
+            -f mov "$outdir/$stem.mov"
+    done
+done
