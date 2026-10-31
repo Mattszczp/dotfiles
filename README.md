@@ -36,6 +36,10 @@ chezmoi apply            # deploy changes to home
 chezmoi status           # what differs (exit 1 + output = out of sync)
 ```
 
+## Agents
+
+`dot_agents/skills/` is the source for agent skills, deployed to `~/.agents/skills`. Claude Code only reads `~/.claude/skills`, which chezmoi links to `~/.agents/skills`, so both see the same skills.
+
 ## Development
 
 ```sh
